@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2022 The Bitcoin Core developers
+// Copyright (c) 2024 The Newitcoin  developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,11 +21,11 @@ namespace node {
 Warnings::Warnings()
 {
     // Pre-release build warning
-    if (!CLIENT_VERSION_IS_RELEASE) {
-        m_warnings.insert(
-            {Warning::PRE_RELEASE_TEST_BUILD,
-             _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications")});
-    }
+    //if (!CLIENT_VERSION_IS_RELEASE) {
+    //    m_warnings.insert(
+    //       {Warning::PRE_RELEASE_TEST_BUILD,
+    //         _("This is Newbitcoin, the new blockchain released on August 21, 2024!")});
+    //}
 }
 bool Warnings::Set(warning_type id, bilingual_str message)
 {
