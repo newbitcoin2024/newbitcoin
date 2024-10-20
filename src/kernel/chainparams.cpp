@@ -27,14 +27,12 @@
 #include <cstring>
 #include <type_traits>
 
-///========
-
-#include <iostream>
-#include "uint256.h"
 #include "arith_uint256.h"
 #include "crypto/sha256.h"
 #include <iostream>
 #include "chainparams.h"
+
+using namespace util::hex_literals;
 
 // Workaround MSVC bug triggering C7595 when calling consteval constructors in
 // initializer lists.
@@ -55,8 +53,6 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
     txNew.vout[0].nValue = genesisReward;
     txNew.vout[0].scriptPubKey = genesisOutputScript;
-// Affiche le hash de la transaction
-    std::cout << "Transaction Hash: " << txNew.GetHash().ToString() << std::endl;
 
     CBlock genesis;
     genesis.nTime    = nTime;
@@ -66,16 +62,6 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
     genesis.vtx.push_back(MakeTransactionRef(std::move(txNew)));
     genesis.hashPrevBlock.SetNull();
     genesis.hashMerkleRoot = BlockMerkleRoot(genesis);
-      // Affiche le hash Merkle root
-    std::cout << "Merkle Root Hash: " << genesis.hashMerkleRoot.ToString() << std::endl;
-
-    // Affiche le hash de l'en-tête du bloc
-    std::cout << "Block Header Hash: " << genesis.GetHash().ToString() << std::endl;
-// Affiche les informations
-    std::cout << "Hash du Bloc Genesis: " << genesis.GetHash().GetHex() << std::endl;
-    std::cout << "Nonce: " << genesis.nNonce << std::endl;
-    std::cout << "Merkle Root Hash: " << genesis.hashMerkleRoot.ToString() << std::endl;
-
     return genesis;
 }
 
@@ -93,11 +79,8 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
 static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     const char* pszTimestamp = "As of today, August 21th, 2024, the NewBitcoin blockchain has been launched, VFCMH";
-    //const char* pszTimestamp = "As of today, August 27th, 2024 the NewBitcoin blockchain has launched";
     const CScript genesisOutputScript = CScript() << ParseHex("6a8454e51707e750aafe8fa97b40658a7dc181146f56a08a0c7ed232fa8239bdaabc3ce9be843de8fc7524fd7a9680cd659b51acc99d1d8e8a778474d16bcfba") << OP_CHECKSIG;
-    //const CScript genesisOutputScript = CScript() << //ParseHex("6a8454e51707e750aafe8fa97b40658a7dc181146f56a08a0c7ed232fa8239bdaabc3ce9be843de8fc7524fd7a9680cd659b51acc99d1d8e8a778474d16bcfba") << OP_CHECKSIG;
-
-return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
+    return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
 /**
@@ -136,14 +119,13 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].min_activation_height = 0; // No activation delay
 
-        // Deployment of Taproot (BIPs 340-342)
+       // Deployment of Taproot (BIPs 340-342)
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 0;    
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 0;  
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0;  
-        consensus.nMinimumChainWork = uint256{"0000000000000000000000000000000000000000000000000000000000000000"};
-        //consensus.nMinimumChainWork = uint256{"000000000000000000000000000000000000000088e186b70e0862c193ec44d6"};
-        //consensus.defaultAssumeValid = uint256{"0000001b84f5b63c01a0e301ad53f9c4f3835bf7f00ee38b437c1da738844550"}; // 7214
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1619222400; // April 24th, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1628640000; // August 11th, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // Approximately November 12th, 2021
+        consensus.nMinimumChainWork = uint256{"000000000000000000000000000000000000000000000000000001097c710c38"};
+       consensus.defaultAssumeValid = uint256{"00000002dfaef02705997a6b943c24f4751109f39e96fb653561dca311009925"}; // 10727
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -155,61 +137,11 @@ public:
         pchMessageStart[2] = 0xb4;
         pchMessageStart[3] = 0xd9;
         nDefaultPort = 9333;
-        //nPruneAfterHeight = 100000;
-        //m_assumed_blockchain_size = 620;
-        //m_assumed_chain_state_size = 14;
+        nPruneAfterHeight = 100000;
+        m_assumed_blockchain_size = 620;
+        m_assumed_chain_state_size = 14;
 
         genesis = CreateGenesisBlock(1725667818, 3790367840, 0x1e00ffff, 1, 50 * COIN);
-        
-        //=======de aici========
-
-// Paramètres pour le bloc genesis de Bitcoin mainnet
-//#define REGENERATE_GENESIS
-#if defined(REGENERATE_GENESIS)
-    // Recalculer le bloc genesis si le hash est incorrect
-    if (genesis.GetHash() != uint256S("0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f")) {
-        printf("Recalculating Genesis Block...\n");
-        
-        // Utilisation de arith_uint256 pour SetCompact
-        arith_uint256 hashTarget = arith_uint256().SetCompact(genesis.nBits);  // Cible de difficulté
-
-        uint256 thash;  // Pour stocker le hash temporaire
-        // Suppression de l'usage de Scrypt, car Bitcoin utilise SHA256
-
-        // Boucle pour recalculer le hash et le nonce du bloc genesis
-        while (true) {
-            // Calcul du hash avec l'algorithme SHA256
-            thash = genesis.GetHash();
-
-            // Comparaison après conversion en arith_uint256
-            if (UintToArith256(thash) <= hashTarget) {
-                printf("Genesis Block Found!\n");
-                break;
-            }
-
-            // Incrémenter le nonce si le hash n'est pas valide
-            ++genesis.nNonce;
-
-            if (genesis.nNonce == 0) {
-                printf("Nonce wrapped, incrementing time\n");
-                ++genesis.nTime;
-            }
-
-            if ((genesis.nNonce & 0xFFFFF) == 0) {
-                printf("Nonce: %u, Hash: %s, Target: %s\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-            }
-        }
-
-        // Afficher le résultat final
-        printf("genesis.nTime = %u\n", genesis.nTime);
-        printf("genesis.nNonce = %u\n", genesis.nNonce);
-        printf("genesis hash = %s\n", thash.ToString().c_str());
-        printf("genesis merkle root = %s\n", genesis.hashMerkleRoot.ToString().c_str());
-    }
-#endif
-
-//========pana aici=============
-
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256{"000000ff07876d775b813db1deed3a27cb6019227cbc7db65c6bec2335336a85"});
         assert(genesis.hashMerkleRoot == uint256{"7ef20d5401e550c6d7695acf8db09eb2eaf914f7403128e3dd2f750dc805c194"});
@@ -219,8 +151,8 @@ public:
         // This is fine at runtime as we'll fall back to using them as an addrfetch if they don't support the
         // service bits we want, but we should get them updated to support all service bits wanted by any
         // release ASAP to avoid it where possible.
-        //vSeeds.emplace_back("seed.mycoin.sipa.be."); // Pieter Wuille, only supports x1, x5, x9, and xd
-        //vSeeds.emplace_back("dnsseed.bluematt.me."); // Matt Corallo, only supports x9
+        vSeeds.emplace_back("newbitcoin.ddns.net"); // Francisc, only supports all
+        vSeeds.emplace_back("newbitcoin1.ddns.net"); // Francisc, only supports all
         //vSeeds.emplace_back("dnsseed.mycoin.dashjr-list-of-p2p-nodes.us."); // Luke Dashjr
         //vSeeds.emplace_back("seed.mycoin.jonasschnelli.ch."); // Jonas Schnelli, only supports x1, x5, x9, and xd
         //vSeeds.emplace_back("seed.btc.petertodd.net."); // Peter Todd, only supports x1, x5, x9, and xd
@@ -245,24 +177,27 @@ public:
         checkpointData = {
             {
                 { 0, uint256{"000000ff07876d775b813db1deed3a27cb6019227cbc7db65c6bec2335336a85"}},
+                { 10727, uint256{"00000002dfaef02705997a6b943c24f4751109f39e96fb653561dca311009925"}},
+                //{ 74000, uint256{"0000000000573993a3c9e41ce34471c079dcf5f52a0e824a81e7f953b8661a20"}},
+                //{105000, uint256{"00000000000291ce28027faea320c8d2b054b2e0fe44a773f3eefb151d6bdc97"}},
                 
             }
         };
 
         m_assumeutxo_data = {
             {
-                .height = 0,
-                .hash_serialized = AssumeutxoHash{uint256{"000000ff07876d775b813db1deed3a27cb6019227cbc7db65c6bec2335336a85"}},
-                .m_chain_tx_count = 1,
-                .blockhash = consteval_ctor(uint256{"000000ff07876d775b813db1deed3a27cb6019227cbc7db65c6bec2335336a85"}),
+                .height = 840'000,
+                .hash_serialized = AssumeutxoHash{uint256{"820b40eb45bf0317086f22a8d6692310915b41f30c5b301bc97f46398235598c"}},
+                .m_chain_tx_count = 4272,
+                .blockhash = consteval_ctor(uint256{"00000006b6da9d2aec3672f6fbe1eef16f1f07c61bdb38d3ce2f72b8bfa5c317"}),
             }
         };
 
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 000000000000000000011c5890365bdbe5d25b97ce0057589acaef4f1a57263f
-            .nTime    = 1725667818,
-            .tx_count = 1,
-            .dTxRate  = 1,
+            .nTime    = 1729419797,
+            .tx_count = 4272,
+            .dTxRate  = 6.7,
         };
     }
 };
