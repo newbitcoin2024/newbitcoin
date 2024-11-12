@@ -178,7 +178,7 @@ public:
             {
                 { 0, uint256{"000000ff07876d775b813db1deed3a27cb6019227cbc7db65c6bec2335336a85"}},
                 { 10727, uint256{"00000002dfaef02705997a6b943c24f4751109f39e96fb653561dca311009925"}},
-                //{ 74000, uint256{"0000000000573993a3c9e41ce34471c079dcf5f52a0e824a81e7f953b8661a20"}},
+                { 13897, uint256{"000000051b845fe8e2f4a74c1205fbade0b8d2866d3caa0040956cfcbd507390"}},
                 //{105000, uint256{"00000000000291ce28027faea320c8d2b054b2e0fe44a773f3eefb151d6bdc97"}},
                 
             }
@@ -186,10 +186,10 @@ public:
 
         m_assumeutxo_data = {
             {
-                .height = 840'000,
-                .hash_serialized = AssumeutxoHash{uint256{"820b40eb45bf0317086f22a8d6692310915b41f30c5b301bc97f46398235598c"}},
+                .height = 13897,
+                .hash_serialized = AssumeutxoHash{uint256{"1531642a455e04b8c05ffee9092744f2e09bf05088e75f0e65ea508cafe24a5d"}},
                 .m_chain_tx_count = 4272,
-                .blockhash = consteval_ctor(uint256{"00000006b6da9d2aec3672f6fbe1eef16f1f07c61bdb38d3ce2f72b8bfa5c317"}),
+                .blockhash = consteval_ctor(uint256{"000000051b845fe8e2f4a74c1205fbade0b8d2866d3caa0040956cfcbd507390"}),
             }
         };
 
