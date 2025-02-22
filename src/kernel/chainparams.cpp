@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2021 The Bitcoin Core developers
-// Copyright (c) 2024 The Newbitcoin developers
+// Copyright (c) 2024- 2025 The Newbitcoin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -121,11 +121,11 @@ public:
 
        // Deployment of Taproot (BIPs 340-342)
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1619222400; // April 24th, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1628640000; // August 11th, 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // Approximately November 12th, 2021
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartTime = 1619222400; // April 24th, 2024
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeout = 1628640000; // August 11th, 2024
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].min_activation_height = 0; // Approximately November 12th, 2024
         consensus.nMinimumChainWork = uint256{"000000000000000000000000000000000000000000000000000001097c710c38"};
-       consensus.defaultAssumeValid = uint256{"00000002dfaef02705997a6b943c24f4751109f39e96fb653561dca311009925"}; // 10727
+       consensus.defaultAssumeValid = uint256{"00000004086e477c1f2ca40d5c1c353fd5f6ebca8c63c8fb0bc30c9b20d5fef8"}; //29128
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -179,6 +179,8 @@ public:
                 { 0, uint256{"000000ff07876d775b813db1deed3a27cb6019227cbc7db65c6bec2335336a85"}},
                 { 10727, uint256{"00000002dfaef02705997a6b943c24f4751109f39e96fb653561dca311009925"}},
                 { 13897, uint256{"000000051b845fe8e2f4a74c1205fbade0b8d2866d3caa0040956cfcbd507390"}},
+                { 29128, uint256{"00000004086e477c1f2ca40d5c1c353fd5f6ebca8c63c8fb0bc30c9b20d5fef8"}},
+
                 //{105000, uint256{"00000000000291ce28027faea320c8d2b054b2e0fe44a773f3eefb151d6bdc97"}},
                 
             }
@@ -186,18 +188,18 @@ public:
 
         m_assumeutxo_data = {
             {
-                .height = 13897,
-                .hash_serialized = AssumeutxoHash{uint256{"1531642a455e04b8c05ffee9092744f2e09bf05088e75f0e65ea508cafe24a5d"}},
-                .m_chain_tx_count = 4272,
-                .blockhash = consteval_ctor(uint256{"000000051b845fe8e2f4a74c1205fbade0b8d2866d3caa0040956cfcbd507390"}),
+                .height = 29128,
+                .hash_serialized = AssumeutxoHash{uint256{"ab344246ba1b1bea47d2a143e69ea0bea8b74ffa044b3f393c34fbd41a59e0f6"}},
+                .m_chain_tx_count = 134357,
+                .blockhash = consteval_ctor(uint256{"00000004086e477c1f2ca40d5c1c353fd5f6ebca8c63c8fb0bc30c9b20d5fef8"}),
             }
         };
 
         chainTxData = ChainTxData{
             // Data from RPC: getchaintxstats 4096 000000000000000000011c5890365bdbe5d25b97ce0057589acaef4f1a57263f
             .nTime    = 1729419797,
-            .tx_count = 4272,
-            .dTxRate  = 6.7,
+            .tx_count = 4864,
+            .dTxRate  = 0.00215,
         };
     }
 };
