@@ -1,8 +1,11 @@
 NewBitcoin Core integration/staging tree
 =====================================
 https://newbitcoin.fr
+
 Download
+
 https://newbitcoin.fr/newbitcoin/en/download.html
+
 What is Bitcoin Core?
 ---------------------
 
